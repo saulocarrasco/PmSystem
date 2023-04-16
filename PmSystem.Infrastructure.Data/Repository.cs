@@ -12,7 +12,7 @@ namespace PmSystem.Infrastructure.Data
         public Repository(PmSystemDbContext dbContext)
         {
             _dbContext = dbContext;
-            _dbSet = dbContext.Set<TEntity>();
+            _dbSet = _dbContext.Set<TEntity>();
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()

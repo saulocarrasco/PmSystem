@@ -2,6 +2,7 @@
 using Moq;
 using PmSystem.Domain.Contracts;
 using PmSystem.Domain.Entities;
+using System.Net.Sockets;
 
 namespace PmSystem.Infrastructure.Data.Test
 {
@@ -10,27 +11,25 @@ namespace PmSystem.Infrastructure.Data.Test
     {
         private IRepository<Customer> _customerRepository;
         private IRepository<Product> _productRepository;
-        private DbContextOptions _options;
+        private DbContextOptions<PmSystemDbContext> _options;
+        private PmSystemDbContext _dbContext;
 
         [SetUp]
         public async Task Setup()
         {
-            _options = new DbContextOptionsBuilder()
+            _options = new DbContextOptionsBuilder<PmSystemDbContext>()
                 .UseInMemoryDatabase("TestingInMemoryDb")
                 .Options;
 
-            _customerRepository = new Mock<IRepository<Customer>>(_options).Object;
-            _productRepository = new Mock<IRepository<Product>>(_options).Object;
+            _dbContext = new PmSystemDbContext(_options);
 
-            // Add some test data
-            _customerRepository.AddAsync(new Customer { Id = 1, Name = "John Doe", Email = "john.doe@example.com" });
-            _customerRepository.AddAsync(new Customer { Id = 2, Name = "Jane Doe", Email = "jane.doe@example.com" });
-            _productRepository.AddAsync(new Product { Id = 1, Description = "Product A", Price = 9.99m });
-            _productRepository.AddAsync(new Product { Id = 2, Description = "Product B", Price = 14.99m });
+            _customerRepository = new Mock<Repository<Customer>>(_dbContext).Object;
+            _productRepository = new Mock<Repository<Product>>(_dbContext).Object;
 
-            // Save changes to the in-memory database
-            await _customerRepository.SaveAsync();
-            await _productRepository.SaveAsync();
+            await _customerRepository.AddAsync(new Customer { Id = 1, Name = "John Doe", Email = "john.doe@example.com", Phone = "+182912345678", Status = true });
+            await _customerRepository.AddAsync(new Customer { Id = 2, Name = "Jane Doe", Email = "jane.doe@example.com", Phone = "+180912340778", Status = true });
+            await _productRepository.AddAsync(new Product { Id = 1, Description = "Product A", Price = 9.99m, Category = "Unknown", Status = true });
+            await _productRepository.AddAsync(new Product { Id = 2, Description = "Product B", Price = 14.99m, Category = "Unknown", Status = true });
         }
 
         [Test]
@@ -89,7 +88,7 @@ namespace PmSystem.Infrastructure.Data.Test
         public async Task TestAddCustomer()
         {
             // Arrange
-            var newCustomer = new Customer { Id = 4, Name = "Tom Smith", Email = "tom.smith@example.com" };
+            var newCustomer = new Customer { Id = 3, Name = "Tom Smith", Email = "tom.smith@example.com", Phone = "+18042156780" };
 
             // Act
             await _customerRepository.AddAsync(newCustomer);
@@ -99,13 +98,14 @@ namespace PmSystem.Infrastructure.Data.Test
             Assert.IsNotNull(result);
             Assert.AreEqual("Tom Smith", result.Name);
             Assert.AreEqual("tom.smith@example.com", result.Email);
+            Assert.AreEqual("+18042156780", result.Phone);
         }
 
         [Test]
         public async Task TestAddProduct()
         {
             // Arrange
-            var newProduct = new Product { Id = 4, Description = "Product D", Price = 24.99m };
+            var newProduct = new Product { Id = 3, Description = "Product D", Price = 24.99m, Category = "UnKnown" };
 
             // Act
             await _productRepository.AddAsync(newProduct);
@@ -115,6 +115,7 @@ namespace PmSystem.Infrastructure.Data.Test
             Assert.IsNotNull(result);
             Assert.AreEqual("Product D", result.Description);
             Assert.AreEqual(24.99m, result.Price);
+            Assert.AreEqual("UnKnown", result.Category);
         }
     }
 }

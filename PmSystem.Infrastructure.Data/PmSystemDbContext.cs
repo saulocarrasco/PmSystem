@@ -16,11 +16,6 @@ namespace PmSystem.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>()
-                        .HasOne(p => p.Customer)
-                        .WithMany(c => c.Products)
-                        .HasForeignKey(p => p.CustomerId);
-
             base.OnModelCreating(modelBuilder);
         }
     }

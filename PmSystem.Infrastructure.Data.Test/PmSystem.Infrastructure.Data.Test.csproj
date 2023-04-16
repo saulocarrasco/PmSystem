@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PmSystem.Domain.Contracts\PmSystem.Domain.Contracts.csproj" />
     <ProjectReference Include="..\PmSystem.Domain\PmSystem.Domain.csproj" />
+    <ProjectReference Include="..\PmSystem.Infrastructure.Data\PmSystem.Infrastructure.Data.csproj" />
   </ItemGroup>
 
 </Project>
