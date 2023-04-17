@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PmSystem.Domain.Application;
 using PmSystem.Domain.Contracts;
 using PmSystem.Domain.Entities;
 
@@ -17,14 +18,14 @@ namespace PmSystem.Api.Controllers
 
         // GET api/products
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_productService.GetAllAsync());
+            return Ok(await _productService.GetAllAsync());
         }
 
         // GET api/products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var product = await _productService.GetByIdAsync(id);
             if (product == null)

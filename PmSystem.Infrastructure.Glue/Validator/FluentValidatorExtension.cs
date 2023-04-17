@@ -11,8 +11,8 @@ namespace PmSystem.Infrastructure.Glue.Validator
             services.AddFluentValidation(options =>
             {
                 // Validate child properties and root collection elements
-                options.ImplicitlyValidateChildProperties = true;
-                options.ImplicitlyValidateRootCollectionElements = true;
+                options.ImplicitlyValidateChildProperties = false;
+                options.ImplicitlyValidateRootCollectionElements = false;
 
                 // Automatic registration of validators in assembly
                 options.RegisterValidatorsFromAssemblyContaining<ProductValidator>();

@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PmSystem.Domain.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PmSystem.Infrastructure.Glue", "PmSystem.Infrastructure.Glue\PmSystem.Infrastructure.Glue.csproj", "{50D20F16-26B6-438F-8D84-63012EFD6599}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmSystem.FrontEnd", "PmSystem.FrontEnd\PmSystem.FrontEnd.csproj", "{028338C3-15FA-490A-9366-8F48C9544E20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PmSystem.FrontEnd", "PmSystem.FrontEnd\PmSystem.FrontEnd.csproj", "{028338C3-15FA-490A-9366-8F48C9544E20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

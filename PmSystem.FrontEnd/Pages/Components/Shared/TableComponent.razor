@@ -1,0 +1,50 @@
+﻿@inject HttpHandleClient<TItem> httpHandle;
+
+@typeparam TItem
+
+@if (Data != null && Data.Count() > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach (var property in typeof(TItem).GetProperties())
+                {
+                    <th>@property.Name</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Data)
+            {
+                <tr>
+                    @foreach (var prop in typeof(TItem).GetProperties())
+                    {
+                        <td>@prop.GetValue(item)</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h5>No records!</h5>
+}
+
+
+@code {
+
+    [Parameter]
+    public IEnumerable<TItem> Data { get; set; }
+    [Parameter]
+    public string ListEndpoint { get; set; }
+    [Parameter]
+    public string EditUrl { get; set; }
+    [Parameter]
+    public string DeleteEndPoint { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Data = await httpHandle.GetAllAsync(ListEndpoint);
+    }
+}

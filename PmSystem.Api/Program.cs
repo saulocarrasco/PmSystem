@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 using PmSystem.Infrastructure.Glue.Cors;
 using PmSystem.Infrastructure.Glue.DI;
 using PmSystem.Infrastructure.Glue.Validator;
@@ -12,6 +13,11 @@ RepositoryDiExtension.Configure(builder.Services);
 ServiceDiExtension.Configure(builder.Services);
 FluentValidatorExtension.Configure(builder.Services);
 CorsHandleConfigExtension.Configure(builder.Services, "_myAllowSpecificOrigins");
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "PmSystem API", Version = "v1" });
+});
 
 //Global Validation Handle
 builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
@@ -41,5 +47,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PmSystem API V1");
+});
 
 app.Run();

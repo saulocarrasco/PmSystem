@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PmSystem.Domain.Contracts;
 using PmSystem.Domain.Entities;
+using System.Runtime.CompilerServices;
 
 namespace PmSystem.Api.Controllers
 {
@@ -8,25 +9,25 @@ namespace PmSystem.Api.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly IService<Customer> _productService;
+        private readonly IService<Customer> _customerService;
 
-        public CustomersController(IService<Customer> productRepository)
+        public CustomersController(IService<Customer> customerRepository)
         {
-            _productService = productRepository;
+            _customerService = customerRepository;
         }
 
         // GET api/customers
         [HttpGet]
-        public ActionResult<IEnumerable<Customer>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_productService.GetAllAsync());
+            return Ok(await _customerService.GetAllAsync());
         }
 
         // GET api/customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var product = await _productService.GetByIdAsync(id);
+            var product = await _customerService.GetByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -38,7 +39,7 @@ namespace PmSystem.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> Post(Customer product)
         {
-            await _productService.AddAsync(product);
+            await _customerService.AddAsync(product);
             return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
         }
 
@@ -51,7 +52,7 @@ namespace PmSystem.Api.Controllers
                 return BadRequest();
             }
 
-            await _productService.UpdateAsync(product);
+            await _customerService.UpdateAsync(product);
 
             return NoContent();
         }
@@ -60,7 +61,7 @@ namespace PmSystem.Api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _productService.DeleteAsync(id);
+            _customerService.DeleteAsync(id);
 
             return NoContent();
         }
