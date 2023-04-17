@@ -9,8 +9,8 @@ namespace PmSystem.Infrastructure.Glue.DI
     {
         public static void Configure(this IServiceCollection services)
         {
-            services.AddTransient(typeof(IRepository<Product>), typeof(Repository<Product>));
-            services.AddTransient(typeof(IRepository<Customer>), typeof(Repository<Customer>));
+            services.AddScoped(typeof(IRepository<Product>), typeof(Repository<Product>));
+            services.AddScoped(typeof(IRepository<Customer>), typeof(Repository<Customer>));
         }
     }
 }

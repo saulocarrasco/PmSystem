@@ -3,31 +3,31 @@ using PmSystem.Domain.Entities;
 
 namespace PmSystem.Domain.Application
 {
-    public class ProductService : IService<Customer>
+    public class ProductService : IService<Product>
     {
-        private readonly IRepository<Customer> _productRepository;
+        private readonly IRepository<Product> _productRepository;
 
-        public ProductService(IRepository<Customer> productRepository)
+        public ProductService(IRepository<Product> productRepository)
         {
             _productRepository = productRepository;
         }
 
-        public async Task<IEnumerable<Customer>> GetAllAsync()
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _productRepository.GetAllAsync();
         }
 
-        public async Task<Customer> GetByIdAsync(int id)
+        public async Task<Product> GetByIdAsync(int id)
         {
             return await _productRepository.GetByIdAsync(id);
         }
 
-        public async Task AddAsync(Customer product)
+        public async Task AddAsync(Product product)
         {
             await _productRepository.AddAsync(product);
         }
 
-        public async Task UpdateAsync(Customer product)
+        public async Task UpdateAsync(Product product)
         {
             await _productRepository.UpdateAsync(product);
         }

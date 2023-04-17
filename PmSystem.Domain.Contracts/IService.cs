@@ -2,12 +2,12 @@
 
 namespace PmSystem.Domain.Contracts
 {
-    public interface IService<T> where T : class
+    public interface IService<TEntity> where TEntity : class
     {
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<T> GetByIdAsync(int id);
-        Task AddAsync(T entity);
-        Task UpdateAsync(T entity);
+        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<TEntity> GetByIdAsync(int id);
+        Task AddAsync(TEntity entity);
+        Task UpdateAsync(TEntity entity);
         Task DeleteAsync(int id);
     }
 }
