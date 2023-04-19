@@ -1,0 +1,95 @@
+﻿@page "/item-report"
+@using PmSystem.FrontEnd.Data
+@using PmSystem.FrontEnd.Pages.Components.Shared
+@using System.Text;
+@inject NavigationManager NavigationManager
+@inject HttpHandleClient<CustomerItemListViewModel> httpCustomerItemHandle;
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Products</PageTitle>
+
+<h1>Products List</h1>
+<div class="row">
+    <div class="col">
+        <EditForm Model="ItemId">
+            <div class="col-auto">
+                <label>Item Number:</label>
+                <InputNumber @bind-Value="@ItemId" />
+            </div>
+            <button class="btn btn-primary" @onclick="GetItems">Search</button>
+        </EditForm>
+    </div>
+</div>
+
+@if (Items != null && Items.Count() > 0)
+{
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary float-end" @onclick="(()=>Export())">Generate</button>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Item Number</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Items)
+            {
+                <tr>
+                    <td>@item.CustomerName</td>
+                    <td>@item.Id</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.ProductPrice</td>
+                    <td>@item.Quantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h5>No data!</h5>
+}
+@code {
+    [Parameter]
+    public int ItemId { get; set; } = 0;
+
+    public IEnumerable<CustomerItemListViewModel> Items { get; set; }
+
+    private async Task GetItems()
+    {
+        Items = await httpCustomerItemHandle.GetReportRecords("report", ItemId);
+    }
+
+    public async Task Export()
+    {
+        var writer = new StringBuilder();
+
+        writer.AppendLine("SEP=,");
+        writer.AppendLine("Id,ProductName,ProductPrice,Quantity,CustomerName");
+        // Write data
+        foreach (var item in Items)
+        {
+            var productName = item.Product?.Description ?? "";
+            var productPrice = item.Product?.Price.ToString("C2") ?? "";
+            var quantity = item.Quantity.ToString();
+            var customerName = item.Customer?.Name ?? "";
+
+            var line = $"{item.Id},{productName},{productPrice},{quantity},{customerName}";
+            writer.AppendLine(line);
+        }
+
+        // Download CSV file
+        var data = Encoding.UTF8.GetBytes(writer.ToString());
+        var base64 = Convert.ToBase64String(data);
+        var href = $"data:text/csv;base64,{base64}";
+
+        await JSRuntime.InvokeVoidAsync("BlazorDownloadFile.downloadFile", "report", href);
+    }
+}

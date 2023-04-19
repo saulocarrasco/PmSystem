@@ -12,6 +12,7 @@ namespace PmSystem.Infrastructure.Glue.DI
             services.AddScoped(typeof(IRepository<Product>), typeof(Repository<Product>));
             services.AddScoped(typeof(IRepository<Customer>), typeof(CustomerRepository));
             services.AddScoped(typeof(IRepository<CustomerItem>), typeof(CustomerItemsRepository));
+            services.AddScoped(typeof(IReportRepository<CustomerItem>), typeof(ReportRepository<CustomerItem>));
         }
     }
 }

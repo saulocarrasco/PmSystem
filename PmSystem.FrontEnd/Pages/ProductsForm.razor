@@ -5,23 +5,24 @@
 
 <h1>Products Form</h1>
 <EditForm model="Product" OnValidSubmit="SaveProduct">
+    <DataAnnotationsValidator />
     <div class="col-auto">
         <label>Description</label>
         <InputText @bind-Value="@Product.Description" />
-        <ValidationMessage For="@(()=>Product.Description)" />
+        <ValidationMessage For="@(()=>Product.Description)" ValidateOnChange="true" />
     </div>
     <div class="col-auto">
         <label>Category</label>
         <InputText @bind-Value="@Product.Category" />
-        <ValidationMessage For="@(()=>Product.Category)" />
+        <ValidationMessage For="@(()=>Product.Category)" ValidateOnChange="true" />
     </div>
     <div class="col-auto">
         <label>Price</label>
         <InputNumber @bind-Value="@Product.Price" />
-        <ValidationMessage For="@(()=>Product.Price)" />
+        <ValidationMessage For="@(()=>Product.Price)" ValidateOnChange="true" />
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
-    <DataAnnotationsValidator />
+
 </EditForm>
 
 @code {
@@ -37,7 +38,7 @@
     {
         if (IsCreateMode)
         {
-             await httpHandle.CreateAsync("products", Product);
+            await httpHandle.CreateAsync("products", Product);
         }
         else
         {

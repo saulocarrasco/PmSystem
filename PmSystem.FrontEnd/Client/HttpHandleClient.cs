@@ -62,4 +62,12 @@ public class HttpHandleClient<T>
     {
         var response = await _httpClient.DeleteAsync($"{_apiBaseUrl}{endpoint}/{id}");
     }
+
+    public async Task<IEnumerable<T>> GetReportRecords(string endppoint, int id)
+    {
+        var response = await _httpClient.GetAsync($"{_apiBaseUrl}{endppoint}/{id}");
+
+        var content = await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<IEnumerable<T>>(content, _settings);
+    }
 }
