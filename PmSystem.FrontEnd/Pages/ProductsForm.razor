@@ -1,0 +1,59 @@
+﻿@page "/product-form/{id?}"
+@using PmSystem.FrontEnd.Data;
+@inject HttpHandleClient<ProductCreateViewModel> httpHandle;
+@inject NavigationManager NavigationManager
+
+<h1>Products Form</h1>
+<EditForm model="Product" OnValidSubmit="SaveProduct">
+    <div class="col-auto">
+        <label>Description</label>
+        <InputText @bind-Value="@Product.Description" />
+        <ValidationMessage For="@(()=>Product.Description)" />
+    </div>
+    <div class="col-auto">
+        <label>Category</label>
+        <InputText @bind-Value="@Product.Category" />
+        <ValidationMessage For="@(()=>Product.Category)" />
+    </div>
+    <div class="col-auto">
+        <label>Price</label>
+        <InputNumber @bind-Value="@Product.Price" />
+        <ValidationMessage For="@(()=>Product.Price)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <DataAnnotationsValidator />
+</EditForm>
+
+@code {
+    [Parameter]
+    public ProductCreateViewModel Product { get; set; } = new ProductCreateViewModel();
+
+    [Parameter]
+    public string Id { get; set; }
+
+    bool IsCreateMode => string.IsNullOrEmpty(Id);
+
+    async Task SaveProduct()
+    {
+        if (IsCreateMode)
+        {
+             await httpHandle.CreateAsync("products", Product);
+        }
+        else
+        {
+            await httpHandle.UpdateAsync("products", Product.Id, Product);
+        }
+
+        NavigationManager.NavigateTo("/products");
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        int id = Convert.ToInt32(Id);
+
+        if (!IsCreateMode)
+        {
+            Product = await httpHandle.GetByIdAsync("products", id);
+        }
+    }
+}

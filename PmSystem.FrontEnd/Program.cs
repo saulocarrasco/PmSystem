@@ -7,8 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped(provider => ActivatorUtilities.CreateInstance<HttpHandleClient<Customer>>(provider, builder.Configuration.GetSection("HttpParameters").Get<HttpParameters>().BaseUri));
-builder.Services.AddScoped(provider => ActivatorUtilities.CreateInstance<HttpHandleClient<Product>>(provider, builder.Configuration.GetSection("HttpParameters").Get<HttpParameters>().BaseUri));
+builder.Services.AddScoped(provider => ActivatorUtilities.CreateInstance<HttpHandleClient<CustomerListViewModel>>(provider, builder.Configuration.GetSection("HttpParameters").Get<HttpParameters>().BaseUri));
+builder.Services.AddScoped(provider => ActivatorUtilities.CreateInstance<HttpHandleClient<ProductListViewModel>>(provider, builder.Configuration.GetSection("HttpParameters").Get<HttpParameters>().BaseUri));
+builder.Services.AddScoped(provider => ActivatorUtilities.CreateInstance<HttpHandleClient<CustomerCreateViewModel>>(provider, builder.Configuration.GetSection("HttpParameters").Get<HttpParameters>().BaseUri));
+builder.Services.AddScoped(provider => ActivatorUtilities.CreateInstance<HttpHandleClient<ProductCreateViewModel>>(provider, builder.Configuration.GetSection("HttpParameters").Get<HttpParameters>().BaseUri));
 
 var app = builder.Build();
 

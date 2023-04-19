@@ -1,0 +1,28 @@
+﻿@page "/customer-form/{id?}"
+@using PmSystem.FrontEnd.Data
+@using PmSystem.FrontEnd.Pages.Components
+@using PmSystem.FrontEnd.Pages.Components.Shared
+@inject HttpHandleClient<CustomerCreateViewModel> httpHandle;
+
+<PageTitle>Customers Form</PageTitle>
+<CustomerBasicForm IsCreateMode="IsCreateMode" CustomerCreateViewModel="Customer" />
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    bool IsCreateMode => string.IsNullOrEmpty(Id);
+
+    [Parameter]
+    public CustomerCreateViewModel Customer { get; set; } = new CustomerCreateViewModel();
+
+    public int id => Convert.ToInt32(Id);
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (!IsCreateMode)
+        {
+            Customer = await httpHandle.GetByIdAsync("customers", id);
+        }
+    }
+}

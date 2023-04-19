@@ -20,8 +20,11 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 //Global Validation Handle
+
 builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 {
+    options.SuppressModelStateInvalidFilter = true;
+
     options.InvalidModelStateResponseFactory = c =>
     {
         var errors = c.ModelState.Values.Where(v => v.Errors.Count > 0)

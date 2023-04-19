@@ -59,9 +59,9 @@ namespace PmSystem.Api.Controllers
 
         // DELETE api/customers/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _customerService.DeleteAsync(id);
+            await _customerService.DeleteAsync(id);
 
             return NoContent();
         }

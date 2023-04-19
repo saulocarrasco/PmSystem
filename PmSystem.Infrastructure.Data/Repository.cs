@@ -27,12 +27,16 @@ namespace PmSystem.Infrastructure.Data
 
         public async Task AddAsync(TEntity entity)
         {
+            entity.Status = true;
+            entity.CreatedAt = DateTime.UtcNow;
             await _dbSet.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(TEntity entity)
         {
+            entity.UpdatedAt = DateTime.UtcNow;
+            entity.Status = true;
             _dbSet.Update(entity);
             await _dbContext.SaveChangesAsync();
         }
@@ -41,6 +45,7 @@ namespace PmSystem.Infrastructure.Data
         {
             var entity = await GetByIdAsync(id);
             entity.Status = false;
+            entity.UpdatedAt = DateTime.UtcNow;
             _dbSet.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }

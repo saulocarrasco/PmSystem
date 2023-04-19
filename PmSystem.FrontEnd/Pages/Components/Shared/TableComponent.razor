@@ -1,36 +1,61 @@
 ﻿@inject HttpHandleClient<TItem> httpHandle;
+@inject NavigationManager NavigationManager
 
 @typeparam TItem
 
-@if (Data != null && Data.Count() > 0)
+@if (IsLoading)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                @foreach (var property in typeof(TItem).GetProperties())
-                {
-                    <th>@property.Name</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Data)
-            {
-                <tr>
-                    @foreach (var prop in typeof(TItem).GetProperties())
-                    {
-                        <td>@prop.GetValue(item)</td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
+    <h5>Loading...</h5>
 }
 else
 {
-    <h5>No records!</h5>
-}
+    if (Data != null && Data.Count() > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    @foreach (var property in typeof(TItem).GetProperties())
+                    {
+                        <th>@property.Name</th>
+                    }
 
+                    @if (!string.IsNullOrEmpty(EditUrl))
+                    {
+                        <th>Edit Option</th>
+                    }
+                    @if (!string.IsNullOrEmpty(DeleteEndPoint))
+                    {
+                        <th>Delete Option</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Data)
+                {
+                    <tr>
+                        @foreach (var prop in typeof(TItem).GetProperties())
+                        {
+                            <td>@prop.GetValue(item)</td>
+                        }
+                        @if (!string.IsNullOrEmpty(EditUrl))
+                        {
+                            <td><button class="btn btn-warning" @onclick="@(() => EditItem(item))">Edit</button></td>
+                        }
+                        @if (!string.IsNullOrEmpty(DeleteEndPoint))
+                        {
+                            <td><button class="btn btn-danger" @onclick="@(() => DeleteItem(item))">Delete</button></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+
+        <h5>No records!</h5>
+    }
+}
 
 @code {
 
@@ -42,9 +67,32 @@ else
     public string EditUrl { get; set; }
     [Parameter]
     public string DeleteEndPoint { get; set; }
+    public bool IsLoading { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadItems();
+    }
+
+    private async Task LoadItems()
+    {
+        IsLoading = true;
         Data = await httpHandle.GetAllAsync(ListEndpoint);
+        IsLoading = false;
+    }
+
+    private void EditItem(TItem item)
+    {
+        var idProperty = item.GetType().GetProperty("Id");
+        var idValue = idProperty.GetValue(item);
+        NavigationManager.NavigateTo($"/{EditUrl}/{idValue}");
+    }
+    private async Task DeleteItem(TItem item)
+    {
+        var idProperty = item.GetType().GetProperty("Id");
+        var idValue = idProperty.GetValue(item);
+
+        await httpHandle.DeleteAsync(DeleteEndPoint, Convert.ToInt32(idValue));
+        await LoadItems();
     }
 }

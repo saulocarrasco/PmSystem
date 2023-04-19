@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PmSystem.Domain.Application;
 using PmSystem.Domain.Contracts;
 using PmSystem.Domain.Entities;
 
@@ -59,9 +58,9 @@ namespace PmSystem.Api.Controllers
 
         // DELETE api/products/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _productService.DeleteAsync(id);
+            await _productService.DeleteAsync(id);
 
             return NoContent();
         }

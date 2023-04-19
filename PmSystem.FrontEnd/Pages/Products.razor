@@ -1,12 +1,21 @@
 ﻿@page "/products"
 @using PmSystem.FrontEnd.Data
 @using PmSystem.FrontEnd.Pages.Components.Shared
+@inject NavigationManager NavigationManager
 
 <PageTitle>Products</PageTitle>
 
 <h1>Products List</h1>
-
-<TableComponent ListEndpoint="products" TItem="Products" />
+<div class="row">
+    <div class="col">
+        <button class="btn btn-primary float-end" @onclick="RedirectToCreate">Create</button>
+    </div>
+</div>
+<TableComponent ListEndpoint="products" TItem="ProductListViewModel" EditUrl="product-form" DeleteEndPoint="products" />
 
 @code {
+    private void RedirectToCreate()
+    {
+        NavigationManager.NavigateTo("/product-form");
+    }
 }
