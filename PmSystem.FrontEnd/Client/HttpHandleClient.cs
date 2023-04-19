@@ -5,19 +5,27 @@ public class HttpHandleClient<T>
 {
     private readonly HttpClient _httpClient;
     private readonly string _apiBaseUrl;
+    private readonly JsonSerializerSettings _settings;
 
     public HttpHandleClient(string apiBaseUrl)
     {
         _httpClient = new HttpClient();
         _apiBaseUrl = apiBaseUrl;
+        _settings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects
+        };
     }
 
     public async Task<IEnumerable<T>> GetAllAsync(string endpoint)
     {
         var response = await _httpClient.GetAsync($"{_apiBaseUrl}{endpoint}");
 
+       
+
         var content = await response.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<IEnumerable<T>>(content);
+        return JsonConvert.DeserializeObject<IEnumerable<T>>(content, _settings);
     }
 
     public async Task<T> GetByIdAsync(string endppoint, int id)
@@ -25,7 +33,7 @@ public class HttpHandleClient<T>
         var response = await _httpClient.GetAsync($"{_apiBaseUrl}{endppoint}/{id}");
 
         var content = await response.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<T>(content);
+        return JsonConvert.DeserializeObject<T>(content, _settings);
     }
 
     public async Task<T> CreateAsync(string endpoint, T item)

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PmSystem.Domain.Contracts;
 using PmSystem.Domain.Entities;
-using System.Runtime.CompilerServices;
 
 namespace PmSystem.Api.Controllers
 {
@@ -11,9 +10,9 @@ namespace PmSystem.Api.Controllers
     {
         private readonly IService<Customer> _customerService;
 
-        public CustomersController(IService<Customer> customerRepository)
+        public CustomersController(IService<Customer> customerService)
         {
-            _customerService = customerRepository;
+            _customerService = customerService;
         }
 
         // GET api/customers
@@ -37,22 +36,22 @@ namespace PmSystem.Api.Controllers
 
         // POST api/customers
         [HttpPost]
-        public async Task<ActionResult<Customer>> Post(Customer product)
+        public async Task<ActionResult<Customer>> Post(Customer customer)
         {
-            await _customerService.AddAsync(product);
-            return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
+            await _customerService.AddAsync(customer);
+            return CreatedAtAction(nameof(GetById), new { id = customer.Id }, customer);
         }
 
         // PUT api/customers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Customer product)
+        public async Task<IActionResult> Put(int id, Customer customer)
         {
-            if (id != product.Id)
+            if (id != customer.Id)
             {
                 return BadRequest();
             }
 
-            await _customerService.UpdateAsync(product);
+            await _customerService.UpdateAsync(customer);
 
             return NoContent();
         }

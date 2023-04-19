@@ -7,7 +7,7 @@ namespace PmSystem.Infrastructure.Data
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : EntityModel, new()
     {
         private readonly PmSystemDbContext _dbContext;
-        private readonly DbSet<TEntity> _dbSet;
+        protected readonly DbSet<TEntity> _dbSet;
 
         public Repository(PmSystemDbContext dbContext)
         {
@@ -15,7 +15,7 @@ namespace PmSystem.Infrastructure.Data
             _dbSet = _dbContext.Set<TEntity>();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _dbSet.Where(i=>i.Status == true).ToListAsync();
         }

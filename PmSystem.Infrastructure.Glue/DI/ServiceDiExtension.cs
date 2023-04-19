@@ -11,6 +11,7 @@ namespace PmSystem.Infrastructure.Glue.DI
         {
             services.AddScoped(typeof(IService<Product>), typeof(ProductService));
             services.AddScoped(typeof(IService<Customer>), typeof(CustomerService));
+            services.AddScoped(typeof(IService<CustomerItem>), typeof(CustomerItemService));
         }
     }
 }

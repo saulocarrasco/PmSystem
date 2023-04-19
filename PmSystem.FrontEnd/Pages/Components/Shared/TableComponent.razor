@@ -16,6 +16,10 @@ else
                 <tr>
                     @foreach (var property in typeof(TItem).GetProperties())
                     {
+                        if (Properties != null && !Properties.Contains(property.Name))
+                        {
+                            continue;
+                        }
                         <th>@property.Name</th>
                     }
 
@@ -35,6 +39,10 @@ else
                     <tr>
                         @foreach (var prop in typeof(TItem).GetProperties())
                         {
+                            if (Properties != null && !Properties.Contains(prop.Name))
+                            {
+                                continue;
+                            }
                             <td>@prop.GetValue(item)</td>
                         }
                         @if (!string.IsNullOrEmpty(EditUrl))
@@ -68,6 +76,9 @@ else
     [Parameter]
     public string DeleteEndPoint { get; set; }
     public bool IsLoading { get; set; }
+
+    [Parameter]
+    public IEnumerable<string> Properties { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

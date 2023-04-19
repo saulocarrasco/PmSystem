@@ -10,9 +10,9 @@ namespace PmSystem.Api.Controllers
     {
         private readonly IService<Product> _productService;
 
-        public ProductsController(IService<Product> productRepository)
+        public ProductsController(IService<Product> productService)
         {
-            _productService = productRepository;
+            _productService = productService;
         }
 
         // GET api/products

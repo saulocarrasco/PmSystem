@@ -3,6 +3,9 @@ using Microsoft.OpenApi.Models;
 using PmSystem.Infrastructure.Glue.Cors;
 using PmSystem.Infrastructure.Glue.DI;
 using PmSystem.Infrastructure.Glue.Validator;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using PmSystem.Domain.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +24,10 @@ builder.Services.AddSwaggerGen(c =>
 
 //Global Validation Handle
 
-builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+builder.Services.AddControllers().AddJsonOptions(x =>x.JsonSerializerOptions.
+ReferenceHandler = ReferenceHandler.IgnoreCycles).ConfigureApiBehaviorOptions(options =>
 {
-    options.SuppressModelStateInvalidFilter = true;
+    //options.SuppressModelStateInvalidFilter = true;
 
     options.InvalidModelStateResponseFactory = c =>
     {

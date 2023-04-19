@@ -18,8 +18,6 @@ namespace PmSystem.Domain.Validators
             RuleFor(p => p.Email)
           .NotEmpty()
           .WithMessage("Email is Required");
-
-            RuleFor(p => p.Products).Null();
         }
     }
 }

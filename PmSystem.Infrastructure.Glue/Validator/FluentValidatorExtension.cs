@@ -16,6 +16,7 @@ namespace PmSystem.Infrastructure.Glue.Validator
                 // Automatic registration of validators in assembly
                 options.RegisterValidatorsFromAssemblyContaining<CustomerValidator>();
                 options.RegisterValidatorsFromAssemblyContaining<ProductValidator>();
+                options.RegisterValidatorsFromAssemblyContaining<CustomerItemValidator>();
             });
         }
     }

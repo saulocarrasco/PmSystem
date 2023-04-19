@@ -1,0 +1,90 @@
+﻿@page "/customer-item-form/{id?}"
+@using PmSystem.FrontEnd.Data
+@using PmSystem.FrontEnd.Pages.Components
+@using PmSystem.FrontEnd.Pages.Components.Shared
+@inject HttpHandleClient<CustomerItemViewModel> httpHandle;
+@inject HttpHandleClient<CustomerCreateViewModel> httpCustomerHandle;
+@inject HttpHandleClient<ProductCreateViewModel> httpProductHandle;
+@inject NavigationManager NavigationManager;
+
+<PageTitle>Customers Items Form</PageTitle>
+<EditForm model="CustomerItem" OnValidSubmit="SaveCustomerItem">
+    <div class="col-auto">
+        <label>Quantity</label>
+        <InputNumber @bind-Value="@CustomerItem.Quantity" />
+        <ValidationMessage For="@(()=>CustomerItem.Quantity)" />
+    </div>
+    <div class="form-group">
+        <label for="my-dropdown">Customers:</label>
+        <InputSelect id="my-dropdown" class="form-control" @bind-Value="@SelectedCustomer">
+            <option value="0">Select Customer</option>
+            @foreach (var customer in CustomersList)
+            {
+                <option value="@customer.Id">@customer.Name</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label for="my-dropdown">Products:</label>
+        <InputSelect id="my-dropdown" class="form-control" @bind-Value="@SelectedProduct">
+            <option value="0">Select Product</option>
+            @foreach (var product in ProductList)
+            {
+                <option value="@product.Id">@product.Description</option>
+            }
+        </InputSelect>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <DataAnnotationsValidator />
+</EditForm>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    bool IsCreateMode => string.IsNullOrEmpty(Id);
+
+    [Parameter]
+    public CustomerItemViewModel CustomerItem { get; set; } = new CustomerItemViewModel();
+
+    public int id => Convert.ToInt32(Id);
+
+    private int SelectedCustomer { get; set; }
+    private int SelectedProduct { get; set; }
+
+    private IEnumerable<CustomerCreateViewModel> CustomersList { get; set; } = new List<CustomerCreateViewModel>();
+    private IEnumerable<ProductCreateViewModel> ProductList { get; set; } = new List<ProductCreateViewModel>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        CustomersList = await httpCustomerHandle.GetAllAsync("customers");
+        ProductList = await httpProductHandle.GetAllAsync("products");
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (!IsCreateMode)
+        {
+            CustomerItem = await httpHandle.GetByIdAsync("customeritems", id);
+            SelectedCustomer = CustomerItem.CustomerId;
+            SelectedProduct = CustomerItem.ProductId;
+        }
+    }
+
+    async Task SaveCustomerItem()
+    {
+        CustomerItem.CustomerId = SelectedCustomer;
+        CustomerItem.ProductId = SelectedProduct;
+
+        if (IsCreateMode)
+        {
+            await httpHandle.CreateAsync("customeritems", CustomerItem);
+        }
+        else
+        {
+            await httpHandle.UpdateAsync("customeritems", CustomerItem.Id, CustomerItem);
+        }
+
+        NavigationManager.NavigateTo("/items-asoc");
+    }
+}
