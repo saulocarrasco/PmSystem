@@ -28,4 +28,4 @@
 ##### Run the project
 ![alt text](https://github.com/saulocarrasco/PmSystem/blob/master/documentation/run-project.jpg)
 
-[DownLoad Technical Document](https://github.com/saulocarrasco/PmSystem/blob/master/documentation/Technical%20Document.docx))
+[DownLoad Technical Document](https://github.com/saulocarrasco/PmSystem/blob/master/documentation/Technical%20Document.docx)
