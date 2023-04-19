@@ -28,4 +28,4 @@
 ##### Run the project
 ![alt text](https://github.com/saulocarrasco/PmSystem/blob/master/documentation/run-project.jpg)
 
-[Technical Document]([path%20with%20spaces/other_file.md](https://docs.google.com/document/d/1fodMo5gKBYapf0DfvWENvwnOApN8D3UUSpwun1UPuME/edit?usp=sharing))
+[DownLoad Technical Document](https://github.com/saulocarrasco/PmSystem/blob/master/documentation/Technical%20Document.docx))
