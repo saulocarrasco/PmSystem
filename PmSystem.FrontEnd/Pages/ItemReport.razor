@@ -21,50 +21,62 @@
     </div>
 </div>
 
-@if (Items != null && Items.Count() > 0)
+@if (IsLoading)
 {
-    <div class="row">
-        <div class="col">
-            <button class="btn btn-primary float-end" @onclick="(()=>Export())">Generate</button>
-        </div>
-    </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Customer Name</th>
-                <th>Item Number</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Quantity</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Items)
-            {
-                <tr>
-                    <td>@item.CustomerName</td>
-                    <td>@item.Id</td>
-                    <td>@item.ProductName</td>
-                    <td>@item.ProductPrice</td>
-                    <td>@item.Quantity</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <h5>Loading...</h5>
 }
 else
 {
-    <h5>No data!</h5>
+    if (Items != null && Items.Count() > 0)
+    {
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary float-end" @onclick="(()=>Export())">Generate</button>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Item Number</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Items)
+                {
+                    <tr>
+                        <td>@item.CustomerName</td>
+                        <td>@item.Id</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.ProductPrice</td>
+                        <td>@item.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h5>No data!</h5>
+    }
 }
+
 @code {
     [Parameter]
     public int ItemId { get; set; } = 0;
 
     public IEnumerable<CustomerItemListViewModel> Items { get; set; }
 
+    public bool IsLoading { get; set; } = false;
+
     private async Task GetItems()
     {
+        IsLoading = true;
         Items = await httpCustomerItemHandle.GetReportRecords("report", ItemId);
+        IsLoading = false;
     }
 
     public async Task Export()

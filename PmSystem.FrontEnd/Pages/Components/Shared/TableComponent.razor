@@ -102,8 +102,9 @@ else
     {
         var idProperty = item.GetType().GetProperty("Id");
         var idValue = idProperty.GetValue(item);
-
+        IsLoading = true;
         await httpHandle.DeleteAsync(DeleteEndPoint, Convert.ToInt32(idValue));
         await LoadItems();
+        IsLoading = false;
     }
 }
