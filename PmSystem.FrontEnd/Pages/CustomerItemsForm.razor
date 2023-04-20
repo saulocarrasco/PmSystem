@@ -8,34 +8,40 @@
 @inject NavigationManager NavigationManager;
 
 <PageTitle>Customers Items Form</PageTitle>
-<EditForm model="CustomerItem" OnValidSubmit="SaveCustomerItem">
-    <div class="col-auto">
-        <label>Quantity</label>
+<EditForm Model="CustomerItem" OnValidSubmit="SaveCustomerItem">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label class="form-label">Quantity</label>
         <InputNumber @bind-Value="@CustomerItem.Quantity" />
-        <ValidationMessage For="@(()=>CustomerItem.Quantity)" ValidateOnChange="true" />
+        <ValidationMessage For="@(()=>CustomerItem.Quantity)" />
     </div>
-    <div class="form-group">
-        <label for="my-dropdown">Customers:</label>
-        <InputSelect id="my-dropdown" class="form-control" @bind-Value="@SelectedCustomer">
-            <option value="0">Select Customer</option>
-            @foreach (var customer in CustomersList)
-            {
-                <option value="@customer.Id">@customer.Name</option>
-            }
-        </InputSelect>
+    <div class="mb-3">
+        <div class="form-group">
+            <label for="my-dropdown" class="form-label">Customers:</label>
+            <InputSelect id="my-dropdown" class="form-control" @bind-Value="@CustomerItem.CustomerId">
+                <option value="0" selected>Select Customer</option>
+                @foreach (var customer in CustomersList)
+                {
+                    <option value="@customer.Id">@customer.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(()=>CustomerItem.CustomerId)" />
+        </div>
     </div>
-    <div class="form-group">
-        <label for="my-dropdown">Products:</label>
-        <InputSelect id="my-dropdown" class="form-control" @bind-Value="@SelectedProduct">
-            <option value="0">Select Product</option>
-            @foreach (var product in ProductList)
-            {
-                <option value="@product.Id">@product.Description</option>
-            }
-        </InputSelect>
+    <div class="mb-3">
+        <div class="form-group">
+            <label for="my-dropdown" class="form-label">Products:</label>
+            <InputSelect id="my-dropdown" class="form-control" @bind-Value="@CustomerItem.ProductId">
+                <option value="0" selected>Select Product</option>
+                @foreach (var product in ProductList)
+                {
+                    <option value="@product.Id">@product.Description</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(()=>CustomerItem.ProductId)" />
+        </div>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
-    <DataAnnotationsValidator />
 </EditForm>
 
 @code {
@@ -48,9 +54,6 @@
     public CustomerItemViewModel CustomerItem { get; set; } = new CustomerItemViewModel();
 
     public int id => Convert.ToInt32(Id);
-
-    private int SelectedCustomer { get; set; }
-    private int SelectedProduct { get; set; }
 
     private IEnumerable<CustomerCreateViewModel> CustomersList { get; set; } = new List<CustomerCreateViewModel>();
     private IEnumerable<ProductCreateViewModel> ProductList { get; set; } = new List<ProductCreateViewModel>();
@@ -66,16 +69,11 @@
         if (!IsCreateMode)
         {
             CustomerItem = await httpHandle.GetByIdAsync("customeritems", id);
-            SelectedCustomer = CustomerItem.CustomerId;
-            SelectedProduct = CustomerItem.ProductId;
         }
     }
 
     async Task SaveCustomerItem()
     {
-        CustomerItem.CustomerId = SelectedCustomer;
-        CustomerItem.ProductId = SelectedProduct;
-
         if (IsCreateMode)
         {
             await httpHandle.CreateAsync("customeritems", CustomerItem);

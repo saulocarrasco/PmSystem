@@ -4,25 +4,24 @@
 @inject NavigationManager NavigationManager
 
 <h1>Products Form</h1>
-<EditForm model="Product" OnValidSubmit="SaveProduct">
+<EditForm Model="Product" OnValidSubmit="SaveProduct">
     <DataAnnotationsValidator />
-    <div class="col-auto">
-        <label>Description</label>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
         <InputText @bind-Value="@Product.Description" />
-        <ValidationMessage For="@(()=>Product.Description)" ValidateOnChange="true" />
+        <ValidationMessage For="@(()=>Product.Description)" />
     </div>
-    <div class="col-auto">
-        <label>Category</label>
+    <div class="mb-3">
+        <label class="form-label">Category</label>
         <InputText @bind-Value="@Product.Category" />
-        <ValidationMessage For="@(()=>Product.Category)" ValidateOnChange="true" />
+        <ValidationMessage For="@(()=>Product.Category)" />
     </div>
-    <div class="col-auto">
-        <label>Price</label>
+    <div class="mb-3">
+        <label class="form-label">Price</label>
         <InputNumber @bind-Value="@Product.Price" />
-        <ValidationMessage For="@(()=>Product.Price)" ValidateOnChange="true" />
+        <ValidationMessage For="@(()=>Product.Price)" />
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-
+    <input type="submit" class="btn btn-primary" value="Save" />
 </EditForm>
 
 @code {

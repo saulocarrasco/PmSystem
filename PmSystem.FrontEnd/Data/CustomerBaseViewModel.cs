@@ -4,13 +4,12 @@ namespace PmSystem.FrontEnd.Data
 {
     public class CustomerBaseViewModel
     {
-        
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Name field is required")]
         public string Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Phone field is required")]
         public string Phone { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Email field is required")]
         public string Email { get; set; }
     }
 }

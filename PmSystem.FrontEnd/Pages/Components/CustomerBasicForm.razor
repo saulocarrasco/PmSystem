@@ -3,24 +3,24 @@
 @inject NavigationManager NavigationManager
 
 <h1>Customers Form</h1>
-<EditForm model="CustomerCreateViewModel" OnValidSubmit="SaveCustomer">
-    <div class="col-auto">
-        <label>Name</label>
-        <InputText @bind-Value="@CustomerCreateViewModel.Name" />
-        <ValidationMessage For="@(()=>CustomerCreateViewModel.Name)" ValidateOnChange="true"/>
-    </div>
-    <div class="col-auto">
-        <label>Phone</label>
-        <InputText @bind-Value="@CustomerCreateViewModel.Phone" />
-        <ValidationMessage For="@(()=>CustomerCreateViewModel.Phone)" ValidateOnChange="true"/>
-    </div>
-    <div class="col-auto">
-        <label>Email</label>
-        <InputText @bind-Value="@CustomerCreateViewModel.Email" />
-        <ValidationMessage For="@(()=>CustomerCreateViewModel.Email)" ValidateOnChange="true" />
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+<EditForm Model="CustomerCreateViewModel" OnValidSubmit="SaveCustomer">
     <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <InputText @bind-Value="@CustomerCreateViewModel.Name" />
+        <ValidationMessage For="@(()=>CustomerCreateViewModel.Name)" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Phone</label>
+        <InputText @bind-Value="@CustomerCreateViewModel.Phone" />
+        <ValidationMessage For="@(()=>CustomerCreateViewModel.Phone)" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <InputText @bind-Value="@CustomerCreateViewModel.Email" />
+        <ValidationMessage For="@(()=>CustomerCreateViewModel.Email)" />
+    </div>
+    <input type="submit" class="btn btn-primary" value="Save" />
 </EditForm>
 
 @code {
@@ -31,6 +31,7 @@
 
     async Task SaveCustomer()
     {
+        
         if (IsCreateMode)
         {
             await httpHandle.CreateAsync("customers", CustomerCreateViewModel);
