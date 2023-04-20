@@ -84,16 +84,16 @@ else
         var writer = new StringBuilder();
 
         writer.AppendLine("SEP=,");
-        writer.AppendLine("Id,ProductName,ProductPrice,Quantity,CustomerName");
+        writer.AppendLine("CustomerName,Id,ProductName,ProductPrice,Quantity");
         // Write data
         foreach (var item in Items)
         {
-            var productName = item.Product?.Description ?? "";
-            var productPrice = item.Product?.Price.ToString("C2") ?? "";
+            var productName = item.ProductName;
+            var productPrice = item.ProductPrice;
             var quantity = item.Quantity.ToString();
-            var customerName = item.Customer?.Name ?? "";
+            var customerName = item.CustomerName;
 
-            var line = $"{item.Id},{productName},{productPrice},{quantity},{customerName}";
+            var line = $"{customerName},{item.Id},{productName},{productPrice},{quantity}";
             writer.AppendLine(line);
         }
 

@@ -15,7 +15,7 @@ namespace PmSystem.Domain.Application
 
         public async Task<IEnumerable<CustomerItem>> GetAsync(int id)
         {
-            Expression<Func<CustomerItem, bool>> expression = i => i.Id == id;
+            Expression<Func<CustomerItem, bool>> expression = i => i.Id == id && i.Status == true;
 
             return await _reportRepository.GetAsync(expression);
         }
